@@ -22,7 +22,7 @@ model Users {
 
 model Doctors {
   id        Int     @id @default(autoincrement())
-  title     String
+  title     String?
   firstname String
   lastname  String
   email     String @unique
