@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const docs = await prisma.doctors.findMany();
+    const clinics = await prisma.clinics.findMany();
     res.send({
       status: 200,
-      docs: docs,
+      clinics: clinics,
     });
   } catch (error) {
     console.error("Fehler beim Abrufen der Ärzte:", error);
@@ -19,39 +19,32 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    if (!req.body || !req.body.docs || !Array.isArray(req.body.docs)) {
+    if (!req.body || !req.body.clinics || !Array.isArray(req.body.clinics)) {
       return res.status(400).json({ error: "Ungültiges JSON-Format." });
     }
 
-    const docs = req.body.docs;
-    console.log("Empfangene Benutzerdaten:", docs);
+    const clinics = req.body.clinics;
 
-    const createdDocs = [];
+    const createdClinics = [];
 
-    for (const doc of docs) {
-      const createdDoc = await prisma.doctors.create({
+    for (const clinic of clinics) {
+      const createdDoc = await prisma.clinics.create({
         data: {
-          firstname: doc.firstname,
-          lastname: doc.lastname,
-          email: doc.email,
-          title: doc.title,
-          clinic: {
-            connect: {
-              id: doc.clinicID || undefined,
-            },
-          },
+          address: clinic.address,
+          city: clinic.city,
+          zip: clinic.zip,
         },
       });
 
       // ÖFFNUNGSZEITEN
 
-      createdDocs.push(createdDoc);
+      createdClinics.push(createdDoc);
     }
 
     // Erfolgreiche Antwort
     res.status(200).json({
       message: "Benutzer erfolgreich hinzugefügt.",
-      createdDocs,
+      createdClinics,
     });
   } catch (error) {
     console.error("Fehler beim Verarbeiten der Anfrage:", error);

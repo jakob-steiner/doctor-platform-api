@@ -26,11 +26,14 @@ model Doctors {
   firstname String
   lastname  String
   email     String @unique
-}
+  clinic  Clinics @relation(fields: [clinicID], references: [id])
+  clinicID Int
+  }
 
-model Practices {
-  id      Int     @id @default(autoincrement())
-  address String
-  zip     String
-  city    String
+model Clinics {
+  id        Int     @id @default(autoincrement())
+  address   String
+  zip       String
+  city      String
+  doctors   Doctors[]
 }
