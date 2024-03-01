@@ -22,13 +22,15 @@ model Users {
 
 model Doctors {
   id        Int     @id @default(autoincrement())
-  title     String?
+  title     String
   firstname String
   lastname  String
   email     String @unique
   clinic  Clinics @relation(fields: [clinicID], references: [id])
   clinicID Int
-  }
+  
+  openingHours OpeningHours[]
+}
 
 model Clinics {
   id        Int     @id @default(autoincrement())
@@ -36,4 +38,17 @@ model Clinics {
   zip       String
   city      String
   doctors   Doctors[]
+
+  openingHours OpeningHours[]
+}
+
+model OpeningHours {
+  doctorId Int @id
+  praticeId Int
+  start DateTime
+  end DateTime
+  weekday Int
+
+  doctor Doctors @relation(fields: [doctorId], references: [id])
+  practice Clinics @relation(fields: [praticeId], references: [id])
 }
