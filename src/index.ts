@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 const docs = require("./routes/docs");
 const users = require("./routes/users");
+const clinics = require("./routes/clinics");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 app.use("/docs", docs);
 app.use("/users", users);
+app.use("/clinics", clinics);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hello world");
